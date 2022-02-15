@@ -51,8 +51,8 @@ post:
     401:
       description: Invalid token
       schema:
-        $ref: './../_common/server_error_response.yaml'
+        $ref: '../_common/server_error_response.yaml'
     500:
       description: Internal Server Error
       schema:
-        $ref: './../_common/server_error_response.yaml'
+        $ref: '../_common/server_error_response.yaml'
