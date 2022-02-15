@@ -1,0 +1,141 @@
+get:
+  tags:
+    - banks
+  summary: List banks for export
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: per_page
+      in: query
+      description: Total record per page
+      required: false
+      type: integer
+    - name: current_page
+      in: query
+      description: Current page
+      required: false
+      type: integer
+    - name: sort_field
+      in: query
+      description: Sort field
+      required: false
+      type: string
+      items:
+        type: string
+        default: id
+    - name: sort_by
+      in: query
+      description: Sort asc or desc
+      required: false
+      type: string
+      items:
+        type: string
+        enum: [asc, desc]
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: '#/definitions/ListBanksResponse'
+    401:
+      description: "Invalid token"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Invalid token",
+          data: {}
+        }
+    500:
+      description: "Internal Server Error"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+definitions:
+  #Response format
+  ListBanksResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          current_page:
+            type: integer
+          per_page:
+            type: integer
+          total:
+            type: integer
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                bank_cd:
+                  type: integer
+                branch_cd:
+                  type: integer
+                bankname_kana:
+                  type: string
+                bankname:
+                  type: string
+                branchname_kana:
+                  type: string
+                branchname:
+                  type: string
+                zip_code:
+                  type: string
+                address:
+                  type: string
+                phone_number:
+                  type: string
+                clearing_house_cd:
+                  type: string
+                line_cd:
+                  type: integer
+                franchise_flag:
+                  type: integer
+                created_at:
+                  type: date-time
+    example: {
+      message: "Success",
+      data: {
+        total: 100,
+        current_page: 1,
+        per_page: 1,
+        data: [
+          {
+            id: 1,
+            bank_cd: 9999,
+            branch_cd: 8888,
+            bankname_kana: "bank name kana",
+            bankname: "bank name",
+            branchname_kana: "branch name kana",
+            branchname: "branch name",
+            zip_code: "888-9999",
+            address: "address example",
+            phone_number: "12345678912",
+            clearing_house_cd: "8888",
+            line_cd: 9999,
+            franchise_flag: 1,
+            created_at: "2022-12-12"
+          }
+        ]
+      }
+    }

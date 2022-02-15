@@ -1,0 +1,101 @@
+put:
+  tags:
+    - requests
+  summary: Update status form input request by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of request to update status
+      required: true
+      type: integer
+    - name: data
+      in: body
+      required: true
+      schema:
+        type: object
+        required:
+          - status
+        properties:
+          status:
+            type: number
+            format: int16
+        example:
+          status: 1
+  responses:
+    "200":
+      description: Successfully
+      schema:
+        $ref: "#/definitions/UpdateStatusCompensationResponse"
+    "400":
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "The value for the parameter 'id' is invalid. Value should be a valid integer",
+          data: {}
+        }
+    "404":
+      description: Record Not found!
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Record Not found!",
+          data: {}
+        }
+    "500":
+      description: Internal Server Error
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+definitions:
+  #Response format
+  UpdateStatusCompensationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          id:
+            type: integer
+          request_id:
+            type: string
+          staff:
+            type: date-time
+          description:
+            type: date-time
+          created_at:
+            type: date-time
+    example: {
+      message: "Update status request successfully!",
+      data: {
+        id: 1,
+        request_id: 222,
+        staff: "admin",
+        description: "OPEN → IN PROCESS",
+        created_at: "2022-12-12 08:08:08",
+      }
+    }

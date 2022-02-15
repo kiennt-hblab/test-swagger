@@ -1,0 +1,53 @@
+post:
+  tags:
+    - member
+  summary: Unstop App by operator in CMS
+  security:
+  - Bearer: []
+  parameters:
+  - in: body
+    name: data
+    description: ID of member
+    schema:
+      type: object
+      required:
+        - member_id
+        - verification_code
+      properties:
+        member_id:
+          type: number
+          format: int64
+        verification_code:
+          type: string
+      example:
+        member_id: 1234567891011
+        verification_code: 1234
+  responses:
+    200:
+      description: Unstop member's app successfully
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Unstop member's app successfully
+          data:
+            type: object
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The verification code is incorrect
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'

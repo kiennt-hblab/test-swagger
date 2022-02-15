@@ -1,0 +1,117 @@
+swagger: "2.0"
+info:
+  description: "RAI TrialPay"
+  version: "1.0.0"
+  title: "RAI TrialPay"
+host: "127.0.0.1"
+basePath: "/api/v1"
+tags:
+  - name: "e-money"
+    description: "Management e-money"
+  - name: "monitoring"
+    description: "Monitoring google cloud metrics of transaction container"
+  - name: "auth"
+    description: "Authentication"
+  - name: "role-permissions"
+    description: "Role Permission"
+  - name: "notifications"
+    description: "Management notifications"
+  - name: "banks"
+    description: "Management bank list"
+
+schemes:
+- "https"
+paths:
+  #e-money api
+  /e-money/operator-change:
+    $ref: './e-money/change_operator.yaml'
+  /e-money/charge-history:
+    $ref: './e-money/charge_history.yaml'
+  /e-money/purchase-history:
+    $ref: './e-money/purchase_history.yaml'
+  /e-money/migrate-history:
+    $ref: './e-money/migrate_history.yaml'
+  /e-money/operator-change-history:
+    $ref: './e-money/operator_change_history.yaml'
+  /e-money/history:
+    $ref: './e-money/history.yaml'
+
+  #monitoring api
+  /monitoring/cpu:
+    $ref: './monitoring/monitoring_cpu_api.yaml'
+  /monitoring/memory:
+    $ref: './monitoring/monitoring_memory_api.yaml'
+
+  # input request
+  /requests:
+    $ref: './requests/list.yaml'
+  /requests/{id}:
+    $ref: './requests/detail.yaml'
+  /requests/{id}/status:
+    $ref: './requests/update-status.yaml'
+  /requests/history:
+    $ref: './requests/history.yaml'
+
+  #member api
+  /members:
+    $ref: './member/member.yaml'
+  /members/{id}:
+    $ref: './member/member.id.yaml'
+  /member/stop:
+    $ref: './member/stop_app.yaml'
+  /member/unstop:
+    $ref: './member/unstop_app.yaml'
+  /members/{member_id}/lock:
+    $ref: './member/remove_lock.yaml'
+  /members/{member_id}/password:
+    $ref: './member/reset_password.yaml'
+  /members/{member_id}/phone:
+    $ref: './member/update_phone.yaml'
+  /member/suspended/verification-code:
+    $ref: './member/reset_unstop_code.yaml'
+  /member-check:
+    $ref: './member/check_member.yaml'
+
+  #auth
+  /auth/verify:
+    $ref: './auth/verify.yaml'
+
+  #role permission
+  /api/v1/roles:
+    $ref: './roles-permissions/list_roles.yaml'
+  /api/v1/permssions:
+    $ref: './roles-permissions/list_permissions.yaml'
+  /api/v1/roles/permissions:
+    $ref: './roles-permissions/roles_permissions.yaml'
+  /api/v1/roles/permission:
+    $ref: './roles-permissions/update_permission_role.yaml'
+
+  #notification api
+  /notifications:
+    $ref: './notification/notification.yaml'
+  /notifications/{id}:
+    $ref: './notification/notification.id.yaml'
+  /notification-categories:
+    $ref: './notification/notification_category.yaml'
+  /notification-categories/{id}:
+    $ref: './notification/notification_category.id.yaml'
+
+  # images
+  /images:
+    $ref: './images/image.yaml'
+  /images/{image_id}:
+    $ref: './images/image.id.yaml'
+
+  # banks
+  /banks:
+    $ref: './banks/bank-list.yaml'
+  /banks/csv-import:
+    $ref: './banks/banks.yaml'
+  /banks/redis:
+    $ref: './banks/redis.yaml'
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header

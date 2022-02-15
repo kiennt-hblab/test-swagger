@@ -1,0 +1,59 @@
+get:
+  tags:
+    - member
+  summary: Check whether member exists and get basic information of member
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: search_key
+      in: query
+      description: Find member by id or phone_number
+      required: true
+      type: string
+  responses:
+    200:
+      description: Success
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Success
+          data:
+            properties:
+              id:
+                type: integer
+                example: 1
+              phone_number:
+                type: string
+                example: 0987654321
+              firstname:
+                type: string
+                example: Yuki
+              lastname:
+                type: string
+                example: Hara
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: search_key is required!
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"

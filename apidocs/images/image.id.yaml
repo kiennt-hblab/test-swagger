@@ -1,0 +1,80 @@
+delete:
+  tags:
+    - images
+  summary: Delete image by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of image
+      required: true
+      type: integer
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: '#/definitions/DeleteImageResponse'
+    400:
+      description: "Bad request"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "The value for the parameter 'id' is invalid. Value should be a valid integer",
+          data: {}
+        }
+    404:
+      description: "Data not found"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Record Not found!",
+          data: {}
+        }
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: "Internal Server Error"
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+definitions:
+  #Response format
+  DeleteImageResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          id:
+            type: integer
+          url:
+            type: string
+          name:
+            type: string
+          created_at:
+            type: date-time
+    example: {
+      message: "Image deleted successfully!",
+      data: {
+          id: 1,
+          url: "http://example.com",
+          name: "example",
+          created_at: "2022-12-12"
+        }
+    }

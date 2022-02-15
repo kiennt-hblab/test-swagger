@@ -1,0 +1,116 @@
+get:
+  tags:
+  - member
+  summary: List member
+  description: List member api
+  operationId: list-member
+  security:
+  - Bearer: []
+  produces:
+  - application/json
+  parameters:
+  - name: member_id
+    in: query
+    description: Find member by ID
+    type: string
+  - name: name
+    in: query
+    description: Find member by name
+    type: string
+  - name: phone_number
+    in: query
+    description: Find member by phone number
+    type: string
+  - name: per_page
+    in: query
+    description: Total record per page
+    required: false
+    type: integer
+  - name: current_page
+    in: query
+    description: Current page
+    required: false
+    type: integer
+  - name: sort_field
+    in: query
+    description: Sort field
+    required: false
+    type: string
+    items:
+      type: string
+      enum: [id, lastname, firstname, total_emoney]
+      default: id
+  - name: sort_by
+    in: query
+    description: Sort asc or desc
+    required: false
+    type: string
+    items:
+      type: string
+      enum: [asc, desc]
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: '#/definitions/ListUserResponse'
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+
+
+definitions:
+  #Response format
+  ListUserResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Success
+      data:
+        properties:
+          current_page:
+            type: integer
+            example: 1
+          per_page:
+            type: integer
+            example: 10
+          total:
+            type: integer
+            example: 1
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 12
+                lastname:
+                  type: string
+                  example: Last Name
+                firstname:
+                  type: string
+                  example: First Name
+                phone_number:
+                  type: string
+                  example: '088888888'
+                status:
+                  type: integer
+                birthday:
+                  type: string
+                  format: date
+                  example: 2000-05-23
+                gender:
+                  type: integer
+                  example: 1
+                total_emoney:
+                  type: integer
+                  example: 10000
+                created_at:
+                  type: string
+                  format: date-time

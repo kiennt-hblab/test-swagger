@@ -1,0 +1,56 @@
+put:
+  tags:
+    - role-permissions
+  summary: Update role permission
+  security:
+    - Bearer: []
+  parameters:
+    - in: body
+      name: data
+      description: Update permission for a Role.
+      schema:
+        type: object
+        required:
+          - role
+          - permission
+          - value
+        properties:
+          role:
+            type: string
+          amount:
+            permission: string
+          value:
+            type: number
+        example:
+          role: CallCenter
+          permission: e-money-adjust
+          value: 1
+  responses:
+    200:
+      description: Update Role Permissions successfully
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Update Role Permissions successfully
+          data:
+            type: object
+    404:
+      description: Role not found
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Role not found
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'

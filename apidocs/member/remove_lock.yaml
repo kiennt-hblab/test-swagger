@@ -1,0 +1,106 @@
+delete:
+  tags:
+    - "member"
+  summary: "Remove lock member by id"
+  security:
+    - Bearer: []
+  produces:
+    - "application/json"
+  parameters:
+    - in: path
+      name: member_id
+      schema:
+        type: number
+        format: int64
+      required: true
+      description: ID of member
+    - in: body
+      name: data
+      description: ID of member
+      schema:
+        type: object
+        required:
+          - type
+          - phone_number
+        properties:
+          phone_number:
+            type: string
+          type:
+            type: number
+            format: int64
+        example: {
+          phone_number: "8965868975632",
+          type: 1
+        }
+  responses:
+    200:
+      description: "Successfully"
+      schema:
+        $ref: "#/definitions/RemoveLockMemberResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "phone_number is required!",
+          data: {}
+        }
+    401:
+      description: "Invalid token"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Invalid token",
+          data: {}
+        }
+    404:
+      description: "Data not found"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Record Not found!",
+          data: {}
+        }
+    "500":
+      description: "Internal Server Error"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+definitions:
+  #Response format
+  RemoveLockMemberResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        type: object
+    example: {
+      message: "Remove lock member successfully",
+      data: {
+      }
+    }

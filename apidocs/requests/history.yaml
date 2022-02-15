@@ -1,0 +1,115 @@
+post:
+  tags:
+    - "requests"
+  summary: "Create request processing history"
+  security:
+    - Bearer: []
+  produces:
+    - "application/json"
+  parameters:
+    - name: body
+      in: body
+      required: true
+      schema:
+        type: object
+        required:
+          - request_id
+          - content
+        properties:
+          request_id:
+            type: number
+            format: int16
+          content:
+            type: string
+        example: {
+          request_id: 123,
+          content: "description example",
+        }
+  responses:
+    200:
+      description: "Success"
+      schema:
+        $ref: "#/definitions/CreateHistoryResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example:
+          data:
+            type: object
+        example: {
+          message: "content is required!",
+          data: {}
+        }
+    401:
+      description: "Invalid token"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Invalid token",
+          data: {}
+        }
+    404:
+      description: "Data not found"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Record Not found!",
+          data: {}
+        }
+    "500":
+      description: "Internal Server Error"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+definitions:
+  #Response format
+  CreateHistoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          id:
+            type: integer
+          request_id:
+            type: integer
+          staff:
+            type: string
+          content:
+            type: string
+          created_at:
+            type: date-time
+    example: {
+      message: "History created successfully!",
+      data: {
+        id: 2,
+        request_id: 123,
+        staff: "admin@gmail.com",
+        content: "description example",
+        created_at: "2022-12-22 10:08:08",
+      }
+    }

@@ -1,0 +1,26 @@
+put:
+  tags:
+    - banks
+  summary: Update list of banks to Redis
+  security:
+    - Bearer: []
+  parameters:
+  responses:
+    200:
+      description: Success
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Update to Redis successfully!
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"

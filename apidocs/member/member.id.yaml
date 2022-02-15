@@ -1,0 +1,198 @@
+get:
+  tags:
+    - "member"
+  summary: "Detail member by id"
+  description: "Returns a single member"
+  operationId: "get member"
+  security:
+    - Bearer: []
+  produces:
+    - "application/json"
+  parameters:
+    - name: "id"
+      in: "path"
+      description: "ID of member to return"
+      required: true
+      type: "integer"
+  responses:
+    200:
+      description: "Successfully"
+      schema:
+        $ref: "#/definitions/DetailMemberResponse"
+    400:
+      description: "Bad request"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "The value for the parameter 'id' is invalid. Value should be a valid integer",
+          data: {}
+        }
+    401:
+      description: "Invalid token"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Invalid token",
+          data: {}
+        }
+    404:
+      description: "Data not found"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Record Not found!",
+          data: {}
+        }
+    500:
+      description: "Internal Server Error"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+delete:
+  tags:
+    - member
+  summary: Cancel member by operator in CMS
+  security:
+    - Bearer: []
+  parameters:
+    - name: id
+      in: path
+      description: ID of member
+      required: true
+      type: integer
+    - in: body
+      name: data
+      schema:
+        type: object
+        properties:
+          request_id:
+            type: integer
+        example:
+          request_id: 1
+  responses:
+    200:
+      description: Cancel member's app successfully
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Cancel member's app successfully
+          data:
+            type: object
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+
+definitions:
+  #Response format
+  DetailMemberResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Successfully
+      data:
+        properties:
+          id:
+            type: integer
+          phone_number:
+            type: string
+          firstname:
+            type: string
+          firstname_kana:
+            type: string
+          lastname:
+            type: string
+          lastname_kana:
+            type: string
+          birthday:
+            type: date
+          total_emoney:
+            type: string
+          gender:
+            type: integer
+          zip_code:
+            type: string
+          city:
+            type: string
+          building:
+            type: string
+          town:
+            type: string
+          lock_passcode:
+            type: boolean
+          lock_sms:
+            type: boolean
+          lock_pre_charge:
+            type: boolean
+          lock_migrate_card:
+            type: boolean
+          cancel_app:
+            type: boolean
+          stop_app:
+            type: boolean
+          created_at:
+            type: string
+            format: date-time
+        example: {
+          id: 2999999999999,
+          phone_number: "0367530999",
+          firstname: "first name example",
+          firstname_kana: "first name kana example",
+          lastname: "last name example",
+          lastname_kana: "last name kana example",
+          birthday: 1995-22-05,
+          total_emoney: 121314,
+          gender: 1,
+          zip_code: 9999999,
+          city: "city example",
+          building: "building example",
+          town: "building example",
+          lock_passcode: true,
+          lock_sms: true,
+          lock_pre_charge: false,
+          lock_migrate_card: true,
+          cancel_app: true,
+          stop_app: false,
+          created_at: 2021-12-21T05:26:39.540Z
+        }

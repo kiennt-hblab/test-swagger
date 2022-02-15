@@ -1,0 +1,54 @@
+put:
+  tags:
+    - member
+  summary: Reset unstop code by Admin in CMS
+  description: Reset the verification code that will be used to unstop member's app
+  security:
+  - Bearer: []
+  parameters:
+  - in: body
+    name: data
+    description: ID of member
+    schema:
+      type: object
+      required:
+        - member_id
+      properties:
+        member_id:
+          type: number
+          format: int64
+      example:
+        member_id: 1234567891011
+  responses:
+    200:
+      description: Successful
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The verification code has been reset successfully
+          data:
+            type: object
+            properties:
+              verification_code:
+                type: string
+                example: 1234
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Member's app is not stopped
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'

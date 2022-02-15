@@ -1,0 +1,194 @@
+get:
+  tags:
+    - notifications
+  summary: List notifications
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: key_search
+      in: query
+      description: Find notifications by key search in title
+      type: string
+    - name: category_id
+      in: query
+      description: Find notifications by category
+      type: integer
+    - name: status
+      in: query
+      description: Find notifications by status
+      type: integer
+    - name: scope
+      in: query
+      description: Find notifications by scope
+      type: integer
+    - name: per_page
+      in: query
+      description: Total record per page
+      type: integer
+    - name: current_page
+      in: query
+      description: Current page
+      type: integer
+    - name: sort_field
+      in: query
+      description: Sort field
+      type: string
+      items:
+        enum: [id, start_at]
+        default: id
+    - name: sort_by
+      in: query
+      description: Sort asc or desc
+      type: string
+      items:
+        enum: [asc, desc]
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/ListNotificationResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'current_page' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+post:
+  tags:
+    - notifications
+  summary: Create notification
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: body
+      in: body
+      required: true
+      schema:
+        type: object
+        required:
+          - title
+          - category_id
+          - content
+          - status
+          - scope
+        properties:
+          title:
+            type: string
+          category_id:
+            type: number
+            format: int
+          content:
+            type: string
+          status:
+            type: number
+            format: int16
+          scope:
+            type: number
+            format: int16
+          member_ids:
+            type: array
+            items:
+              type: number
+              format: int
+          start_at:
+            type: date-time
+          end_at:
+            type: date-time
+        example:
+          title: Maintenance Notice
+          category_id: 1
+          content: System maintenance on Sunday, 12th December 2021
+          status: 1
+          scope: 1
+  responses:
+    200:
+      description: "Success"
+      schema:
+        $ref: "#/definitions/CreateNotificationResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: title is required!
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: "Internal Server Error"
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+definitions:
+  #Response format
+  ListNotificationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Success
+      data:
+        properties:
+          current_page:
+            type: integer
+            example: 1
+          per_page:
+            type: integer
+            example: 100
+          total:
+            type: integer
+            example: 1
+          data:
+            type: array
+            items:
+              allOf:
+                - $ref: "#/definitions/NotificationModel"
+                - type: object
+                  properties:
+                    category_name:
+                      type: string
+                      example: "Maintenance"
+
+  CreateNotificationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Notification created successfully
+      data:
+        allOf:
+          - $ref: "#/definitions/NotificationModel"
+          - type: object
+            properties:
+              member_ids:
+                type: array
+                items:
+                  type: number
+                  format: int
+                example: []
+
+  #Model
+  NotificationModel:
+    $ref: "./object_notification.yaml"

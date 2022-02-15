@@ -1,0 +1,134 @@
+get:
+  tags:
+  - requests
+  summary: List form input requests
+  description: List form input requests api
+  operationId: list-form-input-requests
+  security:
+  - Bearer: []
+  produces:
+  - application/json
+  parameters:
+  - name: status
+    in: query
+    description: Status values that need to be considered for filter
+    required: false
+    type: array
+    items:
+      enum:
+        - "1: Open"
+        - "2: In Progress"
+        - "3: Done"
+        - "4: All"
+      default: [1,2]
+    collectionFormat: multi
+  - name: request_type
+    in: query
+    description: Find request by request_type
+    type: integer
+    items:
+      enum:
+        - "1: Compensation"
+        - "2: Change Phone"
+        - "3: Cancellation"
+      default: nil
+  - name: per_page
+    in: query
+    description: Total record per page
+    required: false
+    type: integer
+  - name: current_page
+    in: query
+    description: Current page
+    required: false
+    type: integer
+  - name: sort_field
+    in: query
+    description: Sort field
+    required: false
+    type: string
+    items:
+      type: string
+      enum: [id created_at]
+      default: id
+  - name: sort_by
+    in: query
+    description: Sort asc or desc
+    required: false
+    type: string
+    items:
+      type: string
+      enum: [asc, desc]
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: '#/definitions/ListRequestResponse'
+    401:
+      description: "Invalid token"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Invalid token",
+          data: {}
+        }
+    500:
+      description: "Internal Server Error"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+definitions:
+  #Response format
+  ListRequestResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          current_page:
+            type: integer
+          per_page:
+            type: integer
+          total:
+            type: integer
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                email:
+                  type: string
+                type_of:
+                  type: integer
+                status:
+                  type: integer
+    example: {
+      current_page: 1,
+      per_page: 10,
+      total: 100,
+      data: [
+        {
+          id: 1,
+          email: quanlx@hblab.vn,
+          type_of: 1,
+          status: 2,
+        }
+      ]
+    }

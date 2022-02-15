@@ -1,0 +1,63 @@
+get:
+  tags:
+    - "auth"
+  summary: "Verify user"
+  description: "Verify user"
+  operationId: "auth-verify"
+  security:
+    - Bearer: []
+  produces:
+    - "application/json"
+  parameters:
+    - name: X-Goog-Authenticated-User-Email
+      in: header
+      required: true
+      type: string
+  responses:
+    "200":
+      description: "Successful"
+      schema:
+        $ref: "#/definitions/VerifyResponse"
+    "401":
+      description: "Unauthorized or Wrong token"
+      schema:
+        $ref: "#/definitions/TokenInvalid"
+    "500":
+      description: "Internal Server Error"
+      schema:
+        $ref: "#/definitions/InternalServerError"
+
+definitions:
+  #Response format
+  VerifyResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        type: object
+        properties:
+          email:
+            type: string
+          role:
+              type: string
+          description:
+            type: string
+
+  TokenInvalid:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Invalid token
+      data:
+        type: object
+
+  InternalServerError:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Internal server error!
+      data:
+        type: object

@@ -1,0 +1,58 @@
+post:
+  tags:
+    - e-money
+  summary: Change e-money by operator in CMS
+  security:
+  - Bearer: []
+  parameters:
+  - in: body
+    name: data
+    description: Info data change(+/-) e-money by operator.
+    schema:
+      type: object
+      required:
+        - member_id
+        - value
+      properties:
+        member_id:
+          type: number
+          format: int64
+        amount:
+          type: number
+          format: int
+        reason:
+          type: string
+          nullable: true
+      example:
+        member_id: 1234567891011
+        amount: 1000
+        reason: event
+  responses:
+    200:
+      description: Update e-money this user successfully.
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Update e-money this user successfully
+          data:
+            type: object
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Member not found
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'

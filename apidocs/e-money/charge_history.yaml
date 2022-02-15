@@ -1,0 +1,128 @@
+get:
+  tags:
+  - e-money
+  summary: Charge history
+  security:
+  - Bearer: []
+  parameters:
+  - name: member_id
+    in: query
+    description: Find charge history by member id
+    type: number
+    format: int64
+  - name: phone_number
+    in: query
+    description: Find charge history by phone number
+    type: string
+  - name: start_date
+    in: query
+    description: Start date search
+    type: string
+    format: date
+  - name: end_date
+    in: query
+    description: End date search
+    type: string
+    format: date
+  - name: per_page
+    in: query
+    description: Total record per page
+    type: integer
+    minimum: 1
+  - name: current_page
+    in: query
+    description: Current page
+    type: integer
+    minimum: 1
+  - name: sort_field
+    in: query
+    description: Sort field
+    type: string
+    items:
+      enum: [id, member_id, amount, created_at, ...]
+      default: id
+  - name: sort_by
+    in: query
+    description: Sort asc or desc
+    type: string
+    items:
+      enum: [asc, desc]
+  responses:
+    200:
+      description: Successful
+      schema:
+        $ref: '#/definitions/ChargeHistoryResponse'
+    401:
+      description: Invalid token
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: './../_common/server_error_response.yaml'
+
+definitions:
+  #Response format
+  ChargeHistoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Get charge history successfully
+      data:
+        type: object
+        properties:
+          current_page:
+            type: integer
+            example: 1
+          per_page:
+            type: integer
+            example: 10
+          total:
+            type: integer
+            example: 100
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  format: int64
+                  example: 1
+                member_id:
+                  type: number
+                  format: int64
+                  example: 1234567891011
+                phone_number:
+                  type: string
+                  example: "0000113115"
+                type_transaction:
+                  type: string
+                  example: "CHARGE"
+                method:
+                  type: string
+                  example: Charge bank
+                note:
+                  type: string
+                  example: Charge in store 1102
+                amount:
+                  type: number
+                  format: int
+                  example: 2000
+                after_emoney:
+                  type: number
+                  format: int
+                  example: 4000
+                store_id:
+                  type: integer
+                  example: 11111
+                terminal_id:
+                  type: integer
+                  example: 22222
+                bank_cd:
+                  type: integer
+                  example: 1234
+                created_at:
+                  type: string
+                  format: date-time

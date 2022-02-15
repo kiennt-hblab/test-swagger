@@ -1,0 +1,185 @@
+get:
+  tags:
+  - images
+  summary: List images
+  security:
+  - Bearer: []
+  produces:
+  - application/json
+  parameters:
+  - name: per_page
+    in: query
+    description: Total record per page
+    required: false
+    type: integer
+  - name: current_page
+    in: query
+    description: Current page
+    required: false
+    type: integer
+  - name: sort_field
+    in: query
+    description: Sort field
+    required: false
+    type: string
+    items:
+      type: string
+      default: id
+  - name: sort_by
+    in: query
+    description: Sort asc or desc
+    required: false
+    type: string
+    items:
+      type: string
+      enum: [asc, desc]
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: '#/definitions/ListImagesResponse'
+    401:
+      description: "Invalid token"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Invalid token",
+          data: {}
+        }
+    500:
+      description: "Internal Server Error"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "Internal server error!",
+          data: {}
+        }
+
+post:
+  tags:
+    - images
+  summary: Create image
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: image
+      in: formData
+      required: true
+      description: The uploaded file data
+      schema:
+        type: object
+        required:
+          - image
+        properties:
+          image:
+            type: file
+        example:
+          image: file.jpg
+  responses:
+    200:
+      description: "Success"
+      schema:
+        $ref: "#/definitions/CreateImageResponse"
+    400:
+      description: "Bad request"
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          data:
+            type: object
+        example: {
+          message: "The value for the parameter 'image' is invalid",
+          data: {}
+        }
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: "Internal Server Error"
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+
+definitions:
+  #Response format
+  CreateImageResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          id:
+            type: integer
+          url:
+            type: string
+          name:
+            type: string
+          created_at:
+            type: date-time
+    example: {
+      message: "Image created successfully!",
+      data: {
+          id: 1,
+          url: "http://example.com",
+          name: "example",
+          created_at: "2022-12-12"
+        }
+    }
+
+
+  #Response format
+  ListImagesResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      data:
+        properties:
+          current_page:
+            type: integer
+          per_page:
+            type: integer
+          total:
+            type: integer
+          data:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                url:
+                  type: string
+                name:
+                  type: string
+    example: {
+      message: "Success",
+      data: {
+        current_page: 1,
+        per_page: 10,
+        total: 100,
+        data: [
+          {
+            id: 1,
+            url: "http://example.com",
+            name: "example",
+          }
+        ]
+      }
+    }

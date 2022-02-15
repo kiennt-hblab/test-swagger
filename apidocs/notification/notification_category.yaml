@@ -1,0 +1,148 @@
+get:
+  tags:
+    - notification-categories
+  summary: List categories of notifications
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: key_search
+      in: query
+      description: Find categories by name
+      type: string
+    - name: status
+      in: query
+      description: Find categories by status
+      type: integer
+    - name: per_page
+      in: query
+      description: Total record per page
+      type: integer
+    - name: current_page
+      in: query
+      description: Current page
+      type: integer
+    - name: sort_field
+      in: query
+      description: Sort field
+      type: string
+      items:
+        enum: [id, name]
+        default: id
+    - name: sort_by
+      in: query
+      description: Sort asc or desc
+      type: string
+      items:
+        enum: [asc, desc]
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/ListNotificationCategoryResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'current_page' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+post:
+  tags:
+    - notification-categories
+  summary: Create notification category
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: body
+      in: body
+      required: true
+      schema:
+        type: object
+        required:
+          - name
+          - status
+        properties:
+          name:
+            type: string
+          status:
+            type: number
+            format: int16
+        example:
+          name: Maintenance
+          status: 1
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/CreateNotificationCategoryResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: name is required!
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+definitions:
+  #Response format
+  ListNotificationCategoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Success
+      data:
+        properties:
+          current_page:
+            type: integer
+            example: 1
+          per_page:
+            type: integer
+            example: 10
+          total:
+            type: integer
+            example: 1
+          data:
+            type: array
+            items:
+              $ref: "#/definitions/NotificationCategoryModel"
+
+  CreateNotificationCategoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Category created successfully
+      data:
+        $ref: "#/definitions/NotificationCategoryModel"
+
+  #Model
+  NotificationCategoryModel:
+    $ref: "./object_notification_category.yaml"

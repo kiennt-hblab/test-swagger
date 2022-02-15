@@ -1,0 +1,222 @@
+get:
+  tags:
+    - notifications
+  summary: Detail notification by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of notification
+      required: true
+      type: integer
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/DetailNotificationResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+put:
+  tags:
+    - notifications
+  summary: Update notification by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of notification
+      required: true
+      type: integer
+    - name: body
+      in: body
+      schema:
+        type: object
+        properties:
+          title:
+            type: string
+          category_id:
+            type: number
+            format: int
+          content:
+            type: string
+          status:
+            type: number
+            format: int16
+          scope:
+            type: number
+            format: int16
+          member_ids:
+            type: array
+            items:
+              type: number
+              format: int
+          start_at:
+            type: date-time
+          end_at:
+            type: date-time
+        example:
+          title: Maintenance Notice
+          status: 1
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/UpdateNotificationResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+delete:
+  tags:
+    - notifications
+  summary: Delete notification by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of notification
+      required: true
+      type: integer
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/DeleteNotificationResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+definitions:
+  #Response format
+  DetailNotificationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Success
+      data:
+        allOf:
+          - $ref: "#/definitions/NotificationModel"
+          - type: object
+            properties:
+              category_name:
+                type: string
+                example: "Maintenance"
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    lastname:
+                      type: string
+                    firstname:
+                      type: string
+                    phone_number:
+                      type: string
+                example: []
+
+  UpdateNotificationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Notification updated successfully
+      data:
+        allOf:
+          - $ref: "#/definitions/NotificationModel"
+          - type: object
+            properties:
+              member_ids:
+                type: array
+                items:
+                  type: number
+                  format: int
+                example: []
+
+  DeleteNotificationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Notification deleted successfully
+      data:
+        allOf:
+          - $ref: "#/definitions/NotificationModel"
+          - type: object
+            properties:
+              deleted_at:
+                example: "2022-12-12T05:00:00.000Z"
+
+  #Model
+  NotificationModel:
+    $ref: "./object_notification.yaml"

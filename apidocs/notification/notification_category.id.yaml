@@ -1,0 +1,177 @@
+get:
+  tags:
+    - notification-categories
+  summary: Detail notification category by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of category
+      required: true
+      type: integer
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/DetailNotificationCategoryResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+put:
+  tags:
+    - notification-categories
+  summary: Update notification category by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of category
+      required: true
+      type: integer
+    - name: body
+      in: body
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          status:
+            type: number
+            format: int16
+        example:
+          name: Maintenance Notice
+          status: 1
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/UpdateNotificationCategoryResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+delete:
+  tags:
+    - notification-categories
+  summary: Delete notification category by id
+  security:
+    - Bearer: []
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of category
+      required: true
+      type: integer
+  responses:
+    200:
+      description: Success
+      schema:
+        $ref: "#/definitions/DeleteNotificationCategoryResponse"
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: The value for the parameter 'id' is invalid. Value should be a valid integer
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    404:
+      description: Not Found
+      schema:
+        $ref: "./../_common/not_found_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+
+
+definitions:
+  #Response format
+  DetailNotificationCategoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Success
+      data:
+        $ref: "#/definitions/NotificationCategoryModel"
+
+  UpdateNotificationCategoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Category updated successfully
+      data:
+        $ref: "#/definitions/NotificationCategoryModel"
+
+  DeleteNotificationCategoryResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Category deleted successfully
+      data:
+        allOf:
+          - $ref: "#/definitions/NotificationCategoryModel"
+          - type: object
+            properties:
+              deleted_at:
+                example: "2022-12-12T05:00:00.000Z"
+
+  #Model
+  NotificationCategoryModel:
+    $ref: "./object_notification_category.yaml"

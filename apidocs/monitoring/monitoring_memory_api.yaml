@@ -1,0 +1,67 @@
+get:
+  tags:
+    - monitoring
+  summary: Monitoring Memory Metric
+  security:
+    - Bearer: []
+  parameters:
+  responses:
+    200:
+      description: Successful
+      schema:
+        $ref: '#/definitions/MonitoringSuccessResponse'
+    401:
+      description: Invalid token
+      schema:
+        $ref: '#/definitions/TokenInvalid'
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: '#/definitions/InternalServerError'
+
+definitions:
+  #Response format
+  MonitoringSuccessResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Fetch monitoring data successfully!
+      data:
+        type: object
+        properties:
+          memory:
+            type: array
+            items:
+              type: object
+              properties:
+                pod_name:
+                  type: string
+                  example: hello-app-549c8f47dd-wjz28
+                value:
+                  type: number
+                  example: 2MB
+                time:
+                  type: string
+                  example: 2021-11-25T07:10:06.242571Z
+          container_name:
+            type: string
+            example: hello-app-sha256-1
+
+  TokenInvalid:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Invalid token
+      data:
+        type: object
+
+  InternalServerError:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Internal server error!
+      data:
+        type: object

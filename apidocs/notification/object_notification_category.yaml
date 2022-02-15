@@ -1,0 +1,23 @@
+type: object
+properties:
+  id:
+    type: number
+    format: int16
+    example: 1
+  name:
+    type: string
+    example: "Maintenance"
+  status:
+    type: number
+    format: int16
+    example: 1
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  deleted_at:
+    type: string
+    format: date-time
+    example: null

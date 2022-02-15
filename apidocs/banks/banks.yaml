@@ -1,0 +1,43 @@
+post:
+  tags:
+    - banks
+  summary: Import list of banks from csv file
+  security:
+    - Bearer: []
+  consumes:
+    - multipart/form-data
+  parameters:
+    - name: file
+      in: formData
+      required: true
+      type: file
+      description: The file to upload
+  responses:
+    200:
+      description: Bank list imported successfully
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Bank list imported successfully!
+          data:
+            type: object
+    400:
+      description: Bad request
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: file is required!
+          data:
+            type: object
+    401:
+      description: Invalid token
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
+    500:
+      description: Internal Server Error
+      schema:
+        $ref: "./../_common/server_error_response.yaml"
