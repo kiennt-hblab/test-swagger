@@ -51,8 +51,20 @@ post:
     401:
       description: Invalid token
       schema:
-        $ref: '../_common/server_error_response.yaml'
+        type: object
+        properties:
+          message:
+            type: string
+            example: An error occurred, please try again.
+          data:
+            type: object
     500:
       description: Internal Server Error
       schema:
-        $ref: '../_common/server_error_response.yaml'
+        type: object
+        properties:
+          message:
+            type: string
+            example: An error occurred, please try again.
+          data:
+            type: object
